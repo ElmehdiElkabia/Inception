@@ -39,6 +39,17 @@ services:
       - wordpress
     volumes:
       - wordpress_data:/var/www/html
+
+  website:
+    build: ./requirements/bonus/website
+    container_name: website
+    restart: always
+    ports:
+      - "8443:8443"
+    env_file:
+      - .env
+    networks:
+      - inception
     
 networks:
   inception:
