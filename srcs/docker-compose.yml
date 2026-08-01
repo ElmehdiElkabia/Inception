@@ -45,7 +45,7 @@ services:
     container_name: website
     restart: always
     ports:
-      - "8443:8443"
+      - "5173:5173"
     env_file:
       - .env
     networks:
@@ -73,6 +73,26 @@ services:
     ports:
       - "21:21"
       - "30000-30009:30000-30009"
+    
+  adminer:
+    build: ./requirements/bonus/adminer
+    container_name: adminer
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    ports:
+      - "8080:8080"
+
+  portainer:
+    build: ./requirements/bonus/portainer
+    container_name: portainer
+    restart: always
+    networks:
+      - inception
+    ports:
+      - "9000:9000"
     
 networks:
   inception:
