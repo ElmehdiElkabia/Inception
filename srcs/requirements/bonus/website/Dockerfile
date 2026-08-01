@@ -1,22 +1,31 @@
 FROM debian:bullseye
 
-RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    apt-get install -y nginx openssl && \
-    apt-get clean && \
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y \
+        curl \
+        ca-certificates \
+        gnupg && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /etc/nginx/ssl
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
+    gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" \
+    > /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN openssl req -x509 -nodes -days 365 \
-    -newkey rsa:2048 \
-    -keyout /etc/nginx/ssl/inception.key \
-    -out /etc/nginx/ssl/inception.crt \
-    -subj "/C=MA/ST=Casablanca/L=Casablanca/O=42/CN=eelkabia.42.fr"
+WORKDIR /app
 
-COPY conf/website.conf /etc/nginx/conf.d/default.conf
-COPY html/ /var/www/html/
+COPY portfolio/package*.json ./
 
-EXPOSE 8443
+RUN npm install
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY portfolio/ .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
