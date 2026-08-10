@@ -3,17 +3,22 @@ name: inception
 services:
   mariadb:
     build: ./requirements/mariadb
+    image: mariadb
     container_name: mariadb
     restart: always
     env_file:
       - .env
     networks:
       - inception
+    secrets:
+      - db_password
+      - db_root_password
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - db:/var/lib/mysql
 
   wordpress:
     build: ./requirements/wordpress
+    image: wordpress
     container_name: wordpress
     restart: always
     depends_on:
@@ -22,11 +27,16 @@ services:
       - .env
     networks:
       - inception
+    secrets:
+      - db_password
+      - wordpress_admin_password
+      - wordpress_editor_password
     volumes:
-      - wordpress_data:/var/www/html
+      - wp:/var/www/html
   
   nginx:
     build: ./requirements/nginx
+    image: nginx
     container_name: nginx
     restart: always
     env_file:
@@ -37,22 +47,21 @@ services:
       - "443:443"
     depends_on:
       - wordpress
+      - website
     volumes:
-      - wordpress_data:/var/www/html
+      - wp:/var/www/html
 
   website:
     build: ./requirements/bonus/website
+    image: website
     container_name: website
     restart: always
-    ports:
-      - "5173:5173"
-    env_file:
-      - .env
     networks:
       - inception
 
   redis:
     build: ./requirements/bonus/redis
+    image: redis
     container_name: redis
     restart: always
     networks:
@@ -60,6 +69,7 @@ services:
 
   ftp:
     build: ./requirements/bonus/ftp
+    image: ftp
     container_name: ftp
     restart: always
     env_file:
@@ -69,45 +79,59 @@ services:
     networks:
       - inception
     volumes:
-      - wordpress_data:/var/www/html
+      - wp:/var/www/html
+    secrets:
+      - ftp_password
     ports:
       - "21:21"
       - "30000-30009:30000-30009"
     
   adminer:
     build: ./requirements/bonus/adminer
+    image: adminer
     container_name: adminer
     restart: always
     depends_on:
       - mariadb
     networks:
       - inception
-    ports:
-      - "8080:8080"
 
   portainer:
     build: ./requirements/bonus/portainer
+    image: portainer
     container_name: portainer
     restart: always
     networks:
       - inception
-    ports:
-      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     
 networks:
   inception:
     driver: bridge
 
 volumes:
-  mariadb_data:
+  db:
     driver: local
     driver_opts:
       type: none
       device: ${DATA_PATH}/mariadb
       o: bind
-  wordpress_data:
+  wp:
     driver: local
     driver_opts:
       type: none
       device: ${DATA_PATH}/wordpress
       o: bind
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  wordpress_admin_password:
+    file: ../secrets/wordpress_admin_password.txt
+  wordpress_editor_password:
+    file: ../secrets/wordpress_editor_password.txt
+  ftp_password:
+    file: ../secrets/ftp_password.txt
