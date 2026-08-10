@@ -6,13 +6,13 @@ all:
 	@mkdir -p ${DATA_DIR}/wordpress
 	${COMPOSE_CMD} up -d --build
 
-down:
+clean:
 	${COMPOSE_CMD} down
 
-clean:
-	${COMPOSE_CMD} down -v
-	@sudo rm -rf ${DATA_DIR}
+fclean: clean
+	docker volume rm inception_db inception_wp
 
 re: clean all
 
 .PHONY: all down clean re
+
