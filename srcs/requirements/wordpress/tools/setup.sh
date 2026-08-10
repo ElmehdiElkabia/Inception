@@ -2,6 +2,10 @@
 
 set -e
 
+MARIADB_PASSWORD=$(cat /run/secrets/db_password)
+WORDPRESS_ADMIN_PASSWORD=$(cat /run/secrets/wordpress_admin_password)
+WORDPRESS_EDITOR_PASSWORD=$(cat /run/secrets/wordpress_editor_password)
+
 echo "=> Waiting for MariaDB..."
 
 until mysqladmin \
