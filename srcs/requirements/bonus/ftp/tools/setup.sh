@@ -2,6 +2,8 @@
 
 set -e
 
+FTP_PASSWORD=$(cat /run/secrets/ftp_password)
+
 echo "=> Starting FTP setup..."
 
 mkdir -p /var/run/vsftpd/empty
