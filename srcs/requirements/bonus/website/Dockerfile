@@ -1,6 +1,6 @@
 FROM debian:bullseye
 
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=$(DEBIAN_FRONTEND)
 
 RUN apt-get update && \
     apt-get install -y \
