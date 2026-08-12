@@ -56,6 +56,10 @@ services:
     image: website
     container_name: website
     restart: always
+    env_file:
+      - .env
+    ports:
+      - "5173:5173"
     networks:
       - inception
 
@@ -91,6 +95,8 @@ services:
     image: adminer
     container_name: adminer
     restart: always
+    ports:
+      - "8080:8080"
     depends_on:
       - mariadb
     networks:
@@ -103,7 +109,12 @@ services:
     restart: always
     networks:
       - inception
+    ports:
+      - "9000:9000"
+    secrets:
+      - portainer_password
     volumes:
+      - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     
 networks:
@@ -123,6 +134,18 @@ volumes:
       type: none
       device: ${DATA_PATH}/wordpress
       o: bind
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${DATA_PATH}/portainer
+      o: bind
+  docker_sock:
+    driver: local
+    driver_opts:
+      type: none
+      device: /var/run/docker.sock
+      o: bind
 
 secrets:
   db_password:
@@ -135,3 +158,5 @@ secrets:
     file: ../secrets/wordpress_editor_password.txt
   ftp_password:
     file: ../secrets/ftp_password.txt
+  portainer_password:
+    file: ../secrets/portainer_password.txt
