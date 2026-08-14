@@ -5,7 +5,7 @@ services:
     build: ./requirements/mariadb
     image: mariadb
     container_name: mariadb
-    restart: always
+    restart: on-failure
     env_file:
       - .env
     networks:
@@ -20,7 +20,7 @@ services:
     build: ./requirements/wordpress
     image: wordpress
     container_name: wordpress
-    restart: always
+    restart: on-failure
     depends_on:
       - mariadb
     env_file:
@@ -38,7 +38,7 @@ services:
     build: ./requirements/nginx
     image: nginx
     container_name: nginx
-    restart: always
+    restart: on-failure
     env_file:
       - .env
     networks:
@@ -55,7 +55,7 @@ services:
     build: ./requirements/bonus/website
     image: website
     container_name: website
-    restart: always
+    restart: on-failure
     env_file:
       - .env
     ports:
@@ -67,7 +67,7 @@ services:
     build: ./requirements/bonus/redis
     image: redis
     container_name: redis
-    restart: always
+    restart: on-failure
     networks:
       - inception
 
@@ -75,7 +75,7 @@ services:
     build: ./requirements/bonus/ftp
     image: ftp
     container_name: ftp
-    restart: always
+    restart: on-failure
     env_file:
       - .env
     depends_on:
@@ -94,7 +94,7 @@ services:
     build: ./requirements/bonus/adminer
     image: adminer
     container_name: adminer
-    restart: always
+    restart: on-failure
     ports:
       - "8080:8080"
     depends_on:
@@ -106,7 +106,7 @@ services:
     build: ./requirements/bonus/portainer
     image: portainer
     container_name: portainer
-    restart: always
+    restart: on-failure
     networks:
       - inception
     ports:
