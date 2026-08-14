@@ -137,7 +137,7 @@ ftp_password.txt
 They are stored outside the Git repository, for example:
 
 ``` text
-/home/qifrey/inception-secrets/
+/home/username/inception-secrets/
 ```
 
 Inside the appropriate containers, Docker makes secrets available under:
@@ -235,7 +235,7 @@ The project uses persistent storage for:
 The required data location is:
 
 ``` text
-/home/qifrey/data
+/home/username/data
 ```
 
 ------------------------------------------------------------------------

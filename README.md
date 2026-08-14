@@ -248,7 +248,7 @@ A named volume is managed by Docker and survives container recreation.
 The persistent data is stored under:
 
 ``` text
-/home/qifrey/data
+/home/username/data
 ```
 
 The project uses persistent storage for:
@@ -404,7 +404,7 @@ WORDPRESS_ADMIN_USER=eelkabia
 WORDPRESS_ADMIN_EMAIL=admin@eelkabia.42.fr
 WORDPRESS_EDITOR_USER=editor
 FTP_USER=ftp_user
-DATA_PATH=/home/qifrey/data
+DATA_PATH=/home/username/data
 ```
 
 Sensitive credentials must not be placed in the `.env` file.
@@ -418,7 +418,7 @@ Sensitive credentials are stored outside the Git repository.
 Example:
 
 ``` text
-/home/qifrey/inception-secrets/
+/home/username/inception-secrets/
 ├── db_password.txt
 ├── db_root_password.txt
 ├── wordpress_admin_password.txt
@@ -429,7 +429,7 @@ Example:
 The secret files should be protected:
 
 ``` bash
-chmod 600 /home/qifrey/inception-secrets/*
+chmod 600 /home/username/inception-secrets/*
 ```
 
 Docker Compose provides these secrets to the appropriate containers.

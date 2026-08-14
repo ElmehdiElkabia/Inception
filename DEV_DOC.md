@@ -90,7 +90,7 @@ WORDPRESS_ADMIN_USER=eelkabia
 WORDPRESS_ADMIN_EMAIL=admin@eelkabia.42.fr
 WORDPRESS_EDITOR_USER=editor
 FTP_USER=ftp_user
-DATA_PATH=/home/qifrey/data
+DATA_PATH=/home/username/data
 ```
 
 The `.env` file must not contain confidential passwords.
@@ -104,7 +104,7 @@ Sensitive credentials are stored outside the Git repository.
 Example:
 
 ``` text
-/home/qifrey/inception-secrets/
+/home/username/inception-secrets/
 ├── db_password.txt
 ├── db_root_password.txt
 ├── wordpress_admin_password.txt
@@ -115,7 +115,7 @@ Example:
 Restrict access to the files:
 
 ``` bash
-chmod 600 /home/qifrey/inception-secrets/*
+chmod 600 /home/username/inception-secrets/*
 ```
 
 Docker Compose provides the required secrets to the relevant containers.
@@ -432,7 +432,7 @@ WordPress website files
 The required data path is:
 
 ``` text
-/home/qifrey/data
+/home/username/data
 ```
 
 ------------------------------------------------------------------------
@@ -453,7 +453,7 @@ MariaDB container
 MariaDB named volume
        |
        v
-/home/qifrey/data
+/home/username/data
 
 WordPress container
        |
@@ -461,7 +461,7 @@ WordPress container
 WordPress named volume
        |
        v
-/home/qifrey/data
+/home/username/data
 ```
 
 Recreating the containers preserves the data as long as the volumes are
